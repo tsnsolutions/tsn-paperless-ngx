@@ -74,7 +74,7 @@ paperless:
   admin:
     username: admin
     email: admin@example.com
-    password: ""
+    password: "admin123"
     existingSecret: ""
     existingSecretPasswordKey: admin-password
 
@@ -82,8 +82,8 @@ paperless:
   config:
     # Required: Set your timezone
     timezone: "Europe/Berlin"
-    # Secret key for Django - will be auto-generated if not provided
-    secretKey: ""
+    # Secret key for Django - explicitly set to avoid template issues
+    secretKey: "paperless-django-secret-key-12345"
     # Allow all hosts (can be restricted for security)
     allowedHosts: "*"
     # CORS settings
