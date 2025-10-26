@@ -151,25 +151,28 @@ spec:
                   {{- end }}
             
             # Redis password (if enabled and authentication is required)
-            {{- $redisEnabled := .Values.redis.enabled }}
-            {{- $redisAuthEnabled := .Values.redis.auth.enabled }}
-            {{- if and $redisEnabled $redisAuthEnabled }}
+            {{- with .Values.redis }}
+            {{- if and .enabled .auth.enabled }}
             - name: PAPERLESS_REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "paperless-ngx.fullname" . }}-secret
+                  name: {{ include "paperless-ngx.fullname" $ }}-secret
                   key: redis-password
-            {{- else if and (not $redisEnabled) .Values.externalRedis.password }}
+            {{- end }}
+            {{- end }}
+            {{- with .Values.externalRedis }}
+            {{- if and (not $.Values.redis.enabled) .password }}
             - name: PAPERLESS_REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  {{- if .Values.externalRedis.existingSecret }}
-                  name: {{ .Values.externalRedis.existingSecret }}
-                  key: {{ .Values.externalRedis.existingSecretPasswordKey }}
+                  {{- if .existingSecret }}
+                  name: {{ .existingSecret }}
+                  key: {{ .existingSecretPasswordKey }}
                   {{- else }}
-                  name: {{ include "paperless-ngx.fullname" . }}-secret
+                  name: {{ include "paperless-ngx.fullname" $ }}-secret
                   key: redis-password
                   {{- end }}
+            {{- end }}
             {{- end }}
             
             # Email configuration (if enabled)

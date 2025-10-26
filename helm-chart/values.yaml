@@ -76,7 +76,7 @@ paperless:
     email: admin@example.com
     password: ""
     existingSecret: ""
-    existingSecretPasswordKey: password
+    existingSecretPasswordKey: admin-password
 
   # Application settings
   config:
