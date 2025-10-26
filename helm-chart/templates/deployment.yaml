@@ -130,7 +130,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.paperless.admin.existingSecret | default (printf "%s-secret" (include "paperless-ngx.fullname" .)) }}
-                  key: {{ .Values.paperless.admin.existingSecretPasswordKey | default "secret-key" }}
+                  key: secret-key
             - name: PAPERLESS_ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:

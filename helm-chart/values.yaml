@@ -137,10 +137,13 @@ redis:
   enabled: true
   auth:
     enabled: false
+  architecture: standalone
   master:
     persistence:
       enabled: true
       size: 2Gi
+  replica:
+    replicaCount: 0
 
 # External database configuration (when postgresql.enabled is false)
 externalDatabase:
