@@ -113,9 +113,9 @@ paperless:
     # Storage class for persistent volumes
     storageClass: ""
     # Size of the persistent volume for data
-    size: 10Gi
+    size: 1Gi
     # Size of the persistent volume for media files
-    mediaSize: 20Gi
+    mediaSize: 2Gi
     # Access mode
     accessMode: ReadWriteOnce
 
