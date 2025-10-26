@@ -136,7 +136,8 @@ postgresql:
 redis:
   enabled: true
   auth:
-    enabled: false
+    enabled: true
+    password: "paperless-redis"
   master:
     persistence:
       enabled: true

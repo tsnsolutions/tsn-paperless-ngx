@@ -27,7 +27,7 @@ data:
   PAPERLESS_DBNAME: {{ include "paperless-ngx.databaseName" . | quote }}
   PAPERLESS_DBUSER: {{ include "paperless-ngx.databaseUsername" . | quote }}
   
-  # Redis configuration
+  # Redis configuration (password will be injected via environment variable)
   PAPERLESS_REDIS: redis://{{ include "paperless-ngx.redisHost" . }}:{{ include "paperless-ngx.redisPort" . }}/{{ .Values.externalRedis.database | default 0 }}
   
   # Email configuration
