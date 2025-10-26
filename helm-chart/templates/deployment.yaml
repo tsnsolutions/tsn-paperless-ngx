@@ -1,0 +1,236 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "paperless-ngx.fullname" . }}
+  labels:
+    {{- include "paperless-ngx.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "paperless-ngx.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "paperless-ngx.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "paperless-ngx.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+          env:
+            # Load configuration from ConfigMap
+            - name: PAPERLESS_TIME_ZONE
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "paperless-ngx.fullname" . }}-config
+                  key: PAPERLESS_TIME_ZONE
+            - name: PAPERLESS_ALLOWED_HOSTS
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "paperless-ngx.fullname" . }}-config
+                  key: PAPERLESS_ALLOWED_HOSTS
+            - name: PAPERLESS_CORS_ALLOWED_HOSTS
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "paperless-ngx.fullname" . }}-config
+                  key: PAPERLESS_CORS_ALLOWED_HOSTS
+            - name: PAPERLESS_STATIC_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "paperless-ngx.fullname" . }}-config
+                  key: PAPERLESS_STATIC_URL
+            - name: PAPERLESS_OCR_LANGUAGES
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "paperless-ngx.fullname" . }}-config
+                  key: PAPERLESS_OCR_LANGUAGES
+            - name: PAPERLESS_TASK_WORKERS
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "paperless-ngx.fullname" . }}-config
+                  key: PAPERLESS_TASK_WORKERS
+            - name: PAPERLESS_THREADS_PER_WORKER
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "paperless-ngx.fullname" . }}-config
+                  key: PAPERLESS_THREADS_PER_WORKER
+            {{- if .Values.paperless.config.forceScriptName }}
+            - name: PAPERLESS_FORCE_SCRIPT_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "paperless-ngx.fullname" . }}-config
+                  key: PAPERLESS_FORCE_SCRIPT_NAME
+            {{- end }}
+            - name: PAPERLESS_ADMIN_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "paperless-ngx.fullname" . }}-config
+                  key: PAPERLESS_ADMIN_USER
+            - name: PAPERLESS_ADMIN_MAIL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "paperless-ngx.fullname" . }}-config
+                  key: PAPERLESS_ADMIN_MAIL
+            - name: PAPERLESS_DBENGINE
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "paperless-ngx.fullname" . }}-config
+                  key: PAPERLESS_DBENGINE
+            - name: PAPERLESS_DBHOST
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "paperless-ngx.fullname" . }}-config
+                  key: PAPERLESS_DBHOST
+            - name: PAPERLESS_DBPORT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "paperless-ngx.fullname" . }}-config
+                  key: PAPERLESS_DBPORT
+            - name: PAPERLESS_DBNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "paperless-ngx.fullname" . }}-config
+                  key: PAPERLESS_DBNAME
+            - name: PAPERLESS_DBUSER
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "paperless-ngx.fullname" . }}-config
+                  key: PAPERLESS_DBUSER
+            - name: PAPERLESS_REDIS
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "paperless-ngx.fullname" . }}-config
+                  key: PAPERLESS_REDIS
+            
+            # Load secrets
+            - name: PAPERLESS_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.paperless.admin.existingSecret | default (printf "%s-secret" (include "paperless-ngx.fullname" .)) }}
+                  key: {{ .Values.paperless.admin.existingSecretPasswordKey | default "secret-key" }}
+            - name: PAPERLESS_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.paperless.admin.existingSecret | default (printf "%s-secret" (include "paperless-ngx.fullname" .)) }}
+                  key: {{ .Values.paperless.admin.existingSecretPasswordKey | default "admin-password" }}
+            - name: PAPERLESS_DBPASS
+              valueFrom:
+                secretKeyRef:
+                  {{- if .Values.postgresql.enabled }}
+                  name: {{ include "paperless-ngx.fullname" . }}-secret
+                  key: database-password
+                  {{- else if .Values.externalDatabase.existingSecret }}
+                  name: {{ .Values.externalDatabase.existingSecret }}
+                  key: {{ .Values.externalDatabase.existingSecretPasswordKey }}
+                  {{- else }}
+                  name: {{ include "paperless-ngx.fullname" . }}-secret
+                  key: database-password
+                  {{- end }}
+            
+            # Email configuration (if enabled)
+            {{- if .Values.paperless.config.email.enabled }}
+            - name: PAPERLESS_EMAIL_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "paperless-ngx.fullname" . }}-config
+                  key: PAPERLESS_EMAIL_HOST
+            - name: PAPERLESS_EMAIL_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "paperless-ngx.fullname" . }}-config
+                  key: PAPERLESS_EMAIL_PORT
+            - name: PAPERLESS_EMAIL_HOST_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "paperless-ngx.fullname" . }}-config
+                  key: PAPERLESS_EMAIL_HOST_USER
+            - name: PAPERLESS_EMAIL_USE_TLS
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "paperless-ngx.fullname" . }}-config
+                  key: PAPERLESS_EMAIL_USE_TLS
+            - name: PAPERLESS_EMAIL_USE_SSL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "paperless-ngx.fullname" . }}-config
+                  key: PAPERLESS_EMAIL_USE_SSL
+            - name: PAPERLESS_DEFAULT_FROM_EMAIL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "paperless-ngx.fullname" . }}-config
+                  key: PAPERLESS_DEFAULT_FROM_EMAIL
+            {{- if .Values.paperless.config.email.hostPassword }}
+            - name: PAPERLESS_EMAIL_HOST_PASSWORD
+              value: {{ .Values.paperless.config.email.hostPassword | quote }}
+            {{- end }}
+            {{- end }}
+            
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            timeoutSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            {{- if .Values.paperless.persistence.enabled }}
+            - name: data
+              mountPath: /usr/src/paperless/data
+            - name: media
+              mountPath: /usr/src/paperless/media
+            {{- end }}
+      volumes:
+        {{- if .Values.paperless.persistence.enabled }}
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ include "paperless-ngx.fullname" . }}-data
+        - name: media
+          persistentVolumeClaim:
+            claimName: {{ include "paperless-ngx.fullname" . }}-media
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

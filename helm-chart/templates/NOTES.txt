@@ -1,0 +1,71 @@
+1. Get the application URL by running these commands:
+{{- if .Values.ingress.enabled }}
+{{- range $host := .Values.ingress.hosts }}
+  {{- range .paths }}
+  http{{ if $.Values.ingress.tls }}s{{ end }}://{{ $host.host }}{{ .path }}
+  {{- end }}
+{{- end }}
+{{- else if contains "NodePort" .Values.service.type }}
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "paperless-ngx.fullname" . }})
+  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  echo http://$NODE_IP:$NODE_PORT
+{{- else if contains "LoadBalancer" .Values.service.type }}
+     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+           You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "paperless-ngx.fullname" . }}'
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "paperless-ngx.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+  echo http://$SERVICE_IP:{{ .Values.service.port }}
+{{- else if contains "ClusterIP" .Values.service.type }}
+  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "paperless-ngx.name" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+  export CONTAINER_PORT=$(kubectl get pod --namespace {{ .Release.Namespace }} $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
+  echo "Visit http://127.0.0.1:8080 to use your application"
+  kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME 8080:$CONTAINER_PORT
+{{- end }}
+
+2. Login to Paperless-ngx:
+   Username: {{ .Values.paperless.admin.username }}
+   {{- if .Values.paperless.admin.password }}
+   Password: {{ .Values.paperless.admin.password }}
+   {{- else }}
+   Password: Get the auto-generated password by running:
+   kubectl get secret --namespace {{ .Release.Namespace }} {{ include "paperless-ngx.fullname" . }}-secret -o jsonpath="{.data.admin-password}" | base64 --decode
+   {{- end }}
+
+3. Important first steps:
+   - Change the default admin password in the web interface
+   - Configure document consumption directories
+   - Set up email notifications (optional)
+   - Configure OCR languages as needed
+
+4. To check the status of your deployment:
+   kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "paperless-ngx.name" . }},app.kubernetes.io/instance={{ .Release.Name }}"
+
+5. To view logs:
+   kubectl logs --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "paperless-ngx.name" . }},app.kubernetes.io/instance={{ .Release.Name }}"
+
+6. Database information:
+   {{- if .Values.postgresql.enabled }}
+   PostgreSQL is running as part of this deployment.
+   Database: {{ .Values.postgresql.auth.database }}
+   Username: {{ .Values.postgresql.auth.username }}
+   {{- else }}
+   External database configured:
+   Host: {{ .Values.externalDatabase.host }}
+   Database: {{ .Values.externalDatabase.database }}
+   {{- end }}
+
+{{- if .Values.paperless.persistence.enabled }}
+7. Persistent storage:
+   Data volume: {{ .Values.paperless.persistence.size }}
+   Media volume: {{ .Values.paperless.persistence.mediaSize }}
+   
+   To backup your data, backup the persistent volumes:
+   - {{ include "paperless-ngx.fullname" . }}-data
+   - {{ include "paperless-ngx.fullname" . }}-media
+{{- else }}
+⚠️  WARNING: Persistence is disabled. Your data will be lost when pods are terminated!
+{{- end }}
+
+{{- if not .Values.ingress.enabled }}
+📝 NOTE: Ingress is disabled. Consider enabling it for external access:
+   helm upgrade {{ .Release.Name }} ./helm-chart --set ingress.enabled=true --set ingress.hosts[0].host=your-domain.com
+{{- end }}

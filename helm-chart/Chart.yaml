@@ -1,0 +1,25 @@
+apiVersion: v2
+name: paperless-ngx
+description: A Helm chart for Paperless-ngx document management system
+type: application
+version: 0.1.0
+appVersion: "2.12.1"
+home: https://github.com/paperless-ngx/paperless-ngx
+sources:
+  - https://github.com/paperless-ngx/paperless-ngx
+keywords:
+  - paperless
+  - document-management
+  - dms
+maintainers:
+  - name: TSN Cloud Team
+    email: cloud@tsn.de
+dependencies:
+  - name: postgresql
+    version: "15.5.17"
+    repository: https://charts.bitnami.com/bitnami
+    condition: postgresql.enabled
+  - name: redis
+    version: "20.0.5"
+    repository: https://charts.bitnami.com/bitnami
+    condition: redis.enabled

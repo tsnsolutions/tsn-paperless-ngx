@@ -1,0 +1,33 @@
+{{- if .Values.paperless.persistence.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "paperless-ngx.fullname" . }}-data
+  labels:
+    {{- include "paperless-ngx.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - {{ .Values.paperless.persistence.accessMode }}
+  resources:
+    requests:
+      storage: {{ .Values.paperless.persistence.size }}
+  {{- if .Values.paperless.persistence.storageClass }}
+  storageClassName: {{ .Values.paperless.persistence.storageClass }}
+  {{- end }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "paperless-ngx.fullname" . }}-media
+  labels:
+    {{- include "paperless-ngx.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - {{ .Values.paperless.persistence.accessMode }}
+  resources:
+    requests:
+      storage: {{ .Values.paperless.persistence.mediaSize }}
+  {{- if .Values.paperless.persistence.storageClass }}
+  storageClassName: {{ .Values.paperless.persistence.storageClass }}
+  {{- end }}
+{{- end }}

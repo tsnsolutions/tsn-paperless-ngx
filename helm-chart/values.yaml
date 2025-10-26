@@ -1,0 +1,163 @@
+# Default values for paperless-ngx.
+# This is a YAML-formatted file.
+
+replicaCount: 1
+
+image:
+  repository: ghcr.io/paperless-ngx/paperless-ngx
+  pullPolicy: IfNotPresent
+  tag: "2.12.1"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext:
+  fsGroup: 1000
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: false
+  runAsNonRoot: true
+  runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 8000
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: paperless.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+resources:
+  limits:
+    cpu: 1000m
+    memory: 2Gi
+  requests:
+    cpu: 500m
+    memory: 1Gi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+# Paperless-ngx specific configuration
+paperless:
+  # Admin user configuration
+  admin:
+    username: admin
+    email: admin@example.com
+    password: ""
+    existingSecret: ""
+    existingSecretPasswordKey: password
+
+  # Application settings
+  config:
+    # Required: Set your timezone
+    timezone: "Europe/Berlin"
+    # Secret key for Django - will be auto-generated if not provided
+    secretKey: ""
+    # Allow all hosts (can be restricted for security)
+    allowedHosts: "*"
+    # CORS settings
+    corsAllowedHosts: "*"
+    # URL prefix if running behind a reverse proxy
+    forceScriptName: ""
+    staticUrl: "/static/"
+    # Enable/disable OCR
+    ocrLanguages: "deu+eng"
+    # Task workers
+    taskWorkers: 1
+    threadsPerWorker: 1
+    # Email settings
+    email:
+      enabled: false
+      host: ""
+      port: 587
+      hostUser: ""
+      hostPassword: ""
+      useTls: true
+      useSSL: false
+      from: ""
+
+  # Data persistence
+  persistence:
+    enabled: true
+    # Storage class for persistent volumes
+    storageClass: ""
+    # Size of the persistent volume for data
+    size: 10Gi
+    # Size of the persistent volume for media files
+    mediaSize: 20Gi
+    # Access mode
+    accessMode: ReadWriteOnce
+
+# PostgreSQL configuration (using Bitnami chart)
+postgresql:
+  enabled: true
+  auth:
+    postgresPassword: "paperless"
+    username: "paperless"
+    password: "paperless"
+    database: "paperless"
+  primary:
+    persistence:
+      enabled: true
+      size: 8Gi
+
+# Redis configuration (using Bitnami chart)
+redis:
+  enabled: true
+  auth:
+    enabled: false
+  master:
+    persistence:
+      enabled: true
+      size: 2Gi
+
+# External database configuration (when postgresql.enabled is false)
+externalDatabase:
+  type: postgresql  # postgresql or mysql
+  host: ""
+  port: 5432
+  username: paperless
+  password: ""
+  database: paperless
+  existingSecret: ""
+  existingSecretPasswordKey: password
+
+# External Redis configuration (when redis.enabled is false)
+externalRedis:
+  host: ""
+  port: 6379
+  password: ""
+  database: 0
+  existingSecret: ""
+  existingSecretPasswordKey: password
