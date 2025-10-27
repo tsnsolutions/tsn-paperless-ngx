@@ -2,7 +2,7 @@ apiVersion: v2
 name: paperless-ngx
 description: A Helm chart for Paperless-ngx document management system
 type: application
-version: 0.1.5
+version: 0.1.0
 appVersion: "2.12.1"
 home: https://github.com/paperless-ngx/paperless-ngx
 sources:
@@ -12,8 +12,8 @@ keywords:
   - document-management
   - dms
 maintainers:
-  - name: TSN Cloud Team
-    email: cloud@tsn.de
+  - name: TSN Cloud Solutions
+    email: info@tsn-cloud.solutions
 dependencies:
   - name: postgresql
     version: "15.5.17"
