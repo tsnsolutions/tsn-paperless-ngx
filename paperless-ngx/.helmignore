@@ -21,5 +21,3 @@
 .idea/
 *.tmproj
 .vscode/
-# OS generated files
-Thumbs.db

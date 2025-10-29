@@ -1,0 +1,129 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}-redis
+spec:
+  replicas: {{ .Values.redis.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}-redis
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}-redis
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}-redis
+          image: "{{ .Values.redis.image.repository }}:{{ .Values.redis.image.tag }}"
+          imagePullPolicy: {{ .Values.redis.image.pullPolicy }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}-postgresql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}-postgresql
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}-postgresql
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}-postgresql
+          image: "{{ .Values.postgresql.image.repository }}:{{ .Values.postgresql.image.tag }}"
+          imagePullPolicy: {{ .Values.postgresql.image.pullPolicy }}
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Chart.Name }}-postgresql-secrets
+                  key: username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Chart.Name }}-postgresql-secrets
+                  key: password
+            - name: PGDATA
+              value: /data
+          envFrom:
+            - configMapRef:
+                name: {{ .Chart.Name }}-postgresql-config          
+          volumeMounts:
+            - name: postgresql-data
+              mountPath: /data
+      volumes:
+        - name: postgresql-data
+          persistentVolumeClaim:
+            claimName: {{ .Chart.Name }}-postgresql-data
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}-paperless
+spec:
+  replicas: {{ .Values.paperless.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}-paperless
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}-paperless
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}-paperless
+          image: "{{ .Values.paperless.image.repository }}:{{ .Values.paperless.image.tag }}"
+          imagePullPolicy: {{ .Values.paperless.image.pullPolicy }}
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - configMapRef:
+                name: {{ .Chart.Name }}-paperless-config          
+          env:
+            - name: PAPERLESS_DBUSER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Chart.Name }}-postgresql-secrets
+                  key: username
+            - name: PAPERLESS_DBPASS
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Chart.Name }}-postgresql-secrets
+                  key: password
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            timeoutSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          volumeMounts:
+            - name: paperless-data
+              mountPath:  /usr/src/paperless/data
+            - name: paperless-media
+              mountPath: /usr/src/paperless/media
+            - name: paperless-consumers
+              mountPath: /usr/src/paperless/consumers
+      volumes:
+        - name: paperless-data
+          persistentVolumeClaim:
+            claimName: {{ .Chart.Name }}-paperless-data
+        - name: paperless-media
+          persistentVolumeClaim:
+            claimName: {{ .Chart.Name }}-paperless-media
+        - name: paperless-consumers
+          persistentVolumeClaim:
+            claimName: {{ .Chart.Name }}-paperless-consumers
+---

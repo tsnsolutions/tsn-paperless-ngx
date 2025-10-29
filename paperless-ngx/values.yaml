@@ -1,0 +1,31 @@
+paperless:
+  admin:
+    username: admin
+    email: info@example.com
+  replicaCount: 1
+  image:
+    repository: paperlessngx/paperless-ngx
+    tag: 2.19.2
+    pullPolicy: IfNotPresent
+
+redis:
+  replicaCount: 1
+  image:
+    repository: redis
+    tag: "6.2-alpine"
+    pullPolicy: IfNotPresent
+
+postgresql:
+  image:
+    repository: postgres
+    tag: "18.0-alpine3.22"
+    pullPolicy: IfNotPresent
+  auth:
+    username: paperless
+    password: paperlesspassword
+
+ingress:
+  host: paperless.example.com
+  className: "traefik"
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
