@@ -78,7 +78,9 @@ spec:
           image: "{{ .Values.paperless.image.repository }}:{{ .Values.paperless.image.tag }}"
           imagePullPolicy: {{ .Values.paperless.image.pullPolicy }}
           ports:
-            - containerPort: 8000
+            - name: http
+              containerPort: 8000
+              protocol: TCP
           envFrom:
             - configMapRef:
                 name: {{ .Chart.Name }}-paperless-config          

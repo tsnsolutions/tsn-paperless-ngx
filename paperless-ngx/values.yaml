@@ -27,5 +27,4 @@ postgresql:
 ingress:
   host: paperless.example.com
   className: "traefik"
-  annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: web
+  annotations: {}
