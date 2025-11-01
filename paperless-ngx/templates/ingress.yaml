@@ -3,9 +3,8 @@ kind: Ingress
 metadata:
   name: {{ .Chart.Name }}-ingress
   annotations:
-    # Optional: Traefik-spezifische Annotationen
-    traefik.ingress.kubernetes.io/router.entrypoints: websecure
-    traefik.ingress.kubernetes.io/router.tls: "true"
+    # Traefik-spezifische Annotationen für HTTP
+    traefik.ingress.kubernetes.io/router.entrypoints: web
     {{- with .Values.ingress.annotations }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
@@ -16,9 +15,10 @@ spec:
       http:
         paths:
           - path: /
+            pathType: Prefix
             backend:
               service:
                 name: {{ .Chart.Name }}-paperless
                 port:
                   number: 80
-            pathType: Prefix
+
