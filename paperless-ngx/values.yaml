@@ -28,3 +28,13 @@ ingress:
   host: paperless.example.com
   className: "traefik"
   annotations: {}
+
+gotenberg:
+  image:
+    repository: docker.io/gotenberg/gotenberg
+    tag: "8.16.0"
+
+tika:
+  image:
+    repository: ghcr.io/paperless-ngx
+    tag: "tika:2.9.1-full"

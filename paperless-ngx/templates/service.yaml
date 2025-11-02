@@ -36,3 +36,30 @@ spec:
       port: 5432
       targetPort: 5432
   type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Chart.Name }}-gotenberg
+spec:
+  selector:
+    app: {{ .Chart.Name }}-gotenberg
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Chart.Name }}-tika
+spec:
+  selector:
+    app: {{ .Chart.Name }}-tika
+  ports:
+    - protocol: TCP
+      port: 9998
+      targetPort: 9998
+  type: ClusterIP
+---

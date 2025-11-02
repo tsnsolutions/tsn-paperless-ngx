@@ -21,4 +21,3 @@ spec:
                 name: {{ .Chart.Name }}-paperless
                 port:
                   number: 80
-

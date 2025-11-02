@@ -15,6 +15,11 @@ data:
   PAPERLESS_DBHOST: {{ .Chart.Name }}-postgresql
   PAPERLESS_DBPORT: "5432"
   PAPERLESS_DBNAME: "paperless-ngx"
+
+  # Gotenberg configuration      
+  PAPERLESS_TIKA_ENABLED: 1
+  PAPERLESS_TIKA_GOTENBERG_ENDPOINT: http://{{ .Chart.Name }}-gotenberg:3000
+  PAPERLESS_TIKA_ENDPOINT: http://{{ .Chart.Name }}-tika:9998
 ---
 apiVersion: v1
 kind: ConfigMap
