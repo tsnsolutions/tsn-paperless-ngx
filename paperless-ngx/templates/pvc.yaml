@@ -57,7 +57,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ .Chart.Name }}-n8n-postgres-data
+  name: {{ .Chart.Name }}-n8n-postgresql-data
 spec:
   storageClassName: "local-path"
   accessModes:      
