@@ -63,3 +63,16 @@ spec:
       targetPort: 9998
   type: ClusterIP
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Chart.Name }}-n8n
+spec:
+  selector:
+    app: {{ .Chart.Name }}-n8n
+  ports:
+    - protocol: TCP
+      port: 5678
+      targetPort: 5678
+  type: ClusterIP
+---

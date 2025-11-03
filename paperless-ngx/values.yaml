@@ -31,10 +31,27 @@ ingress:
 
 gotenberg:
   image:
-    repository: docker.io/gotenberg/gotenberg
-    tag: "8.16.0"
+    repository: gotenberg/gotenberg
+    tag: "8.24.0"
 
 tika:
   image:
-    repository: ghcr.io/paperless-ngx
-    tag: "tika:2.9.1-full"
+    repository: apache/tika
+    tag: "3.2.3.0-full"
+
+n8n:
+  image:
+    repository: docker.n8n.io/n8nio/n8n
+    tag: "1.118.0"
+  ingress:
+    host: n8n.example.com
+    className: "traefik"
+    annotations: {}
+  postgresql:
+    image:
+      repository: postgres
+      tag: "18.0-alpine3.22"
+      pullPolicy: IfNotPresent
+    auth:
+      username: n8n
+      password: n8npassword

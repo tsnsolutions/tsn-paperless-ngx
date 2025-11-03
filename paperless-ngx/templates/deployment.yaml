@@ -159,3 +159,74 @@ spec:
               containerPort: 9998
               protocol: TCP
 ---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}-n8n-postgresql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}-n8n-postgresql
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}-n8n-postgresql
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}-n8n-postgresql
+          image: "{{ .Values.n8n.postgresql.image.repository }}:{{ .Values.n8n.postgresql.image.tag }}"
+          imagePullPolicy: {{ .Values.n8n.postgresql.image.pullPolicy }}
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Chart.Name }}-n8n-postgresql-secrets
+                  key: username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Chart.Name }}-n8n-postgresql-secrets
+                  key: password
+            - name: PGDATA
+              value: /data
+          envFrom:
+            - configMapRef:
+                name: {{ .Chart.Name }}-n8n-postgresql-config          
+          volumeMounts:
+            - name: n8n-postgresql-data
+              mountPath: /data
+      volumes:
+        - name: n8n-postgresql-data
+          persistentVolumeClaim:
+            claimName: {{ .Chart.Name }}-n8n-postgresql-data
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}-n8n
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}-n8n
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}-n8n
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}-n8n
+          image: "{{ .Values.n8n.image.repository }}:{{ .Values.n8n.image.tag }}"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: n8n
+              containerPort: 5678
+              protocol: TCP
+          volumeMounts:
+            - name: n8n-data
+              mountPath: /home/node/.n8n
+      volumes:
+        - name: n8n-data
+          persistentVolumeClaim:
+            claimName: {{ .Chart.Name }}-n8n-data

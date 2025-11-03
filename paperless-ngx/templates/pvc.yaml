@@ -41,3 +41,27 @@ spec:
   resources:
     requests:
       storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Chart.Name }}-n8n-data
+spec:
+  storageClassName: "local-path"
+  accessModes:      
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Chart.Name }}-n8n-postgres-data
+spec:
+  storageClassName: "local-path"
+  accessModes:      
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
