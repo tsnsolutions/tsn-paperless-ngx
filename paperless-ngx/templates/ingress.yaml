@@ -29,13 +29,13 @@ metadata:
   annotations:
     # Traefik-spezifische Annotationen für HTTP
     traefik.ingress.kubernetes.io/router.entrypoints: web
-    {{- with .Values.ingress.annotations }}
+    {{- with .Values.n8n.ingress.annotations }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
 spec:
   ingressClassName: traefik
   rules:
-    - host: {{ .Values.ingress.host | quote }}
+    - host: {{ .Values.n8n.ingress.host | quote }}
       http:
         paths:
           - path: /
