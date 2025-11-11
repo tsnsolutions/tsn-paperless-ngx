@@ -4,10 +4,12 @@ metadata:
   name: {{ .Chart.Name }}-ingress
   annotations:
     # Traefik-spezifische Annotationen für HTTP
-    traefik.ingress.kubernetes.io/router.entrypoints: web
     {{- with .Values.ingress.annotations }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
+    kubernetes.io/ingress.class: "traefik"
+    traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+    traefik.ingress.kubernetes.io/router.tls.certresolver: hetznerdns
 spec:
   ingressClassName: traefik
   rules:
@@ -28,10 +30,12 @@ metadata:
   name: {{ .Chart.Name }}-n8n-ingress
   annotations:
     # Traefik-spezifische Annotationen für HTTP
-    traefik.ingress.kubernetes.io/router.entrypoints: web
     {{- with .Values.n8n.ingress.annotations }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
+    kubernetes.io/ingress.class: "traefik"
+    traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+    traefik.ingress.kubernetes.io/router.tls.certresolver: hetznerdns
 spec:
   ingressClassName: traefik
   rules:

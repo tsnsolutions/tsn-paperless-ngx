@@ -20,6 +20,8 @@ data:
   PAPERLESS_TIKA_ENABLED: "1"
   PAPERLESS_TIKA_GOTENBERG_ENDPOINT: http://{{ .Chart.Name }}-gotenberg:3000
   PAPERLESS_TIKA_ENDPOINT: http://{{ .Chart.Name }}-tika:9998
+
+  N8N_SECURE_COOKIE: "false"
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -39,7 +41,6 @@ data:
   DB_POSTGRESDB_PORT: "5432"
   DB_POSTGRESDB_DATABASE: n8n
   DB_POSTGRESDB_USER: n8n
-  N8N_SECURE_COOKIE: "false"
 ---
 apiVersion: v1
 kind: ConfigMap
