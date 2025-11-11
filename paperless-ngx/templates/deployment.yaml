@@ -225,7 +225,13 @@ spec:
               protocol: TCP
           envFrom:
             - configMapRef:
-                name: {{ .Chart.Name }}-n8n-config          
+                name: {{ .Chart.Name }}-n8n-config
+          env:
+            - name: DB_POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Chart.Name }}-n8n-postgresql-secrets
+                  key: password
           volumeMounts:
             - name: n8n-data
               mountPath: /home/node/.n8n          

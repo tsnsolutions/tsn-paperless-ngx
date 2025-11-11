@@ -46,4 +46,4 @@ kind: ConfigMap
 metadata:
   name: {{ .Chart.Name }}-n8n-postgresql-config
 data:
-  POSTGRES_DB: "n8n"
+  DB_POSTGRES_PASSWORD: "n8n"
