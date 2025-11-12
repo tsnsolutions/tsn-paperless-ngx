@@ -88,12 +88,12 @@ spec:
             - name: PAPERLESS_DBUSER
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Chart.Name }}-postgresql-secrets
+                  name: {{ .Chart.Name }}-paperless-ngx-postgresql-secrets
                   key: username
             - name: PAPERLESS_DBPASS
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Chart.Name }}-postgresql-secrets
+                  name: {{ .Chart.Name }}-paperless-ngx-postgresql-secrets
                   key: password
           volumeMounts:
             - name: paperless-data
