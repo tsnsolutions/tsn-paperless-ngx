@@ -227,7 +227,12 @@ spec:
             - configMapRef:
                 name: {{ .Chart.Name }}-n8n-config
           env:
-            - name: DB_POSTGRES_PASSWORD
+            - name: DB_POSTGRESDB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Chart.Name }}-n8n-postgresql-secrets
+                  key: username          
+            - name: DB_POSTGRESDB_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ .Chart.Name }}-n8n-postgresql-secrets
