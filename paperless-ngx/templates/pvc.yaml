@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ .Chart.Name }}-postgresql-data
+  name: {{ .Chart.Name }}-paperless-postgresql-data
 spec:
   storageClassName: "local-path"
   accessModes:
