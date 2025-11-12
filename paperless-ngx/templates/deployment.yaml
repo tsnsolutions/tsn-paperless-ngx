@@ -47,7 +47,7 @@ spec:
                   name: {{ .Chart.Name }}-postgresql-secrets
                   key: password
             - name: PGDATA
-              value: /data
+              value: /data/pgdata
           envFrom:
             - configMapRef:
                 name: {{ .Chart.Name }}-postgresql-config          
@@ -189,7 +189,7 @@ spec:
                   name: {{ .Chart.Name }}-n8n-postgresql-secrets
                   key: password
             - name: PGDATA
-              value: /data
+              value: /data/pgdata
           envFrom:
             - configMapRef:
                 name: {{ .Chart.Name }}-n8n-postgresql-config          
