@@ -46,6 +46,7 @@ data:
   DB_POSTGRESDB_PORT: "5432"
   DB_POSTGRESDB_DATABASE: n8n
   N8N_SECURE_COOKIE: "false"
+  N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: "true"
   # N8N basic configuration
   N8N_HOST: {{ .Values.n8n.ingress.host | quote }}
   N8N_PORT: "5678"
