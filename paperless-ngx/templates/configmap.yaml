@@ -24,7 +24,7 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Chart.Name }}-postgresql-config
+  name: {{ .Chart.Name }}-paperless-postgresql-config
 data:
   POSTGRES_DB: "paperless-ngx"
 ---
