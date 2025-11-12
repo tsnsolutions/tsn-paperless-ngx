@@ -19,7 +19,7 @@ data:
 
   # PostgreSQL configuration (password will be injected via environment variable)
   PAPERLESS_DBENGINE: postgresql
-  PAPERLESS_DBHOST: {{ .Chart.Name }}-postgresql
+  PAPERLESS_DBHOST: {{ .Chart.Name }}-paperless-postgresql
   PAPERLESS_DBPORT: "5432"
   PAPERLESS_DBNAME: "paperless-ngx"
 
