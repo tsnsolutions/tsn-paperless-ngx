@@ -3,6 +3,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: {{ .Chart.Name }}-postgresql-data
 spec:
+  storageClassName: "local-path"
   accessModes:
     - ReadWriteOnce
   resources:
@@ -14,6 +15,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: {{ .Chart.Name }}-paperless-data
 spec:
+  storageClassName: "local-path"
   accessModes:
     - ReadWriteOnce
   resources:
@@ -25,6 +27,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: {{ .Chart.Name }}-paperless-media
 spec:
+  storageClassName: "local-path"
   accessModes:
     - ReadWriteOnce
   resources:
@@ -36,6 +39,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: {{ .Chart.Name }}-paperless-consumers
 spec:
+  storageClassName: "local-path"
   accessModes:      
     - ReadWriteOnce
   resources:
