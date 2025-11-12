@@ -27,10 +27,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Chart.Name }}-postgresql
+  name: {{ .Chart.Name }}-paperless-postgresql
 spec:
   selector:
-    app: {{ .Chart.Name }}-postgresql
+    app: {{ .Chart.Name }}-paperless-postgresql
   ports:
     - protocol: TCP
       port: 5432
@@ -61,6 +61,19 @@ spec:
     - protocol: TCP
       port: 9998
       targetPort: 9998
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Chart.Name }}-n8n-postgresql
+spec:
+  selector:
+    app: {{ .Chart.Name }}-n8n-postgresql
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
   type: ClusterIP
 ---
 apiVersion: v1
