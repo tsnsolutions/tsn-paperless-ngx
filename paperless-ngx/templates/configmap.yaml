@@ -13,7 +13,8 @@ data:
   # Admin user configuration
   PAPERLESS_ADMIN_USER: {{ .Values.paperless.admin.username | quote }}
   PAPERLESS_ADMIN_MAIL: {{ .Values.paperless.admin.email | quote }}
-
+  PAPERLESS_ADMIN_PASSWORD: {{ .Values.paperless.admin.password | quote }}
+  
   # Redis configuration (password will be injected via environment variable)
   PAPERLESS_REDIS: redis://{{ .Chart.Name }}-redis:6379
 
@@ -27,6 +28,8 @@ data:
   PAPERLESS_TIKA_ENABLED: "1"
   PAPERLESS_TIKA_GOTENBERG_ENDPOINT: http://{{ .Chart.Name }}-gotenberg:3000
   PAPERLESS_TIKA_ENDPOINT: http://{{ .Chart.Name }}-tika:9998
+
+  PAPERLESS_ACCOUNT_ALLOW_SIGNUPS: {{ .Values.paperless.allowSignups | quote }}
 ---
 apiVersion: v1
 kind: ConfigMap
