@@ -30,6 +30,11 @@ data:
   PAPERLESS_TIKA_ENDPOINT: http://{{ .Chart.Name }}-tika:9998
 
   PAPERLESS_ACCOUNT_ALLOW_SIGNUPS: {{ .Values.paperless.allowSignups | quote }}
+  PAPERLESS_OCR_LANGUAGE: deu+eng
+  PAPERLESS_DATE_PARSER_LANGUAGES: de+en
+  PAPERLESS_OCR_OUTPUT_TYPE: pdfa-3
+  PAPERLESS_CONSUMER_RECURSIVE: "true"
+  PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS: "true"
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -67,3 +72,5 @@ data:
   N8N_HIRING_BANNER_ENABLED: "false"
   N8N_PERSONALIZATION_ENABLED: "false"
   N8N_VERSION_NOTIFICATIONS_ENABLED: "false"
+  
+  N8N_LICENSE_ACTIVATION_KEY: {{ .Values.n8n.licenseKey | quote }}
