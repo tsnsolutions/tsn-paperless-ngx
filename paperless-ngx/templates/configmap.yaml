@@ -74,3 +74,4 @@ data:
   N8N_VERSION_NOTIFICATIONS_ENABLED: "false"
   
   N8N_LICENSE_ACTIVATION_KEY: {{ .Values.n8n.licenseKey | quote }}
+  NODE_FUNCTION_ALLOW_BUILTIN: crypto
