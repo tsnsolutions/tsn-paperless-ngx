@@ -35,6 +35,9 @@ data:
   PAPERLESS_OCR_OUTPUT_TYPE: pdfa-3
   PAPERLESS_CONSUMER_RECURSIVE: "true"
   PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS: "true"
+ 
+  PAPERLESS_URL: {{ printf "https://%s" .Values.paperless.ingress.host | quote }}
+
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -72,6 +75,3 @@ data:
   N8N_HIRING_BANNER_ENABLED: "false"
   N8N_PERSONALIZATION_ENABLED: "false"
   N8N_VERSION_NOTIFICATIONS_ENABLED: "false"
-  
-  N8N_LICENSE_ACTIVATION_KEY: {{ .Values.n8n.licenseKey | quote }}
-  NODE_FUNCTION_ALLOW_BUILTIN: crypto
