@@ -42,8 +42,8 @@ tika:
 
 n8n:
   image:
-    repository: docker.n8n.io/n8nio/n8n
-    tag: "1.118.0"
+    repository: n8nio/n8n
+    tag: "1.123.1"
   ingress:
     host: n8n.example.com
     className: "traefik"
