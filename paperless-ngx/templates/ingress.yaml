@@ -4,7 +4,7 @@ metadata:
   name: {{ .Chart.Name }}-ingress
   annotations:
     # Traefik-spezifische Annotationen für HTTP
-    {{- with .Values.ingress.annotations }}
+    {{- with .Values.paperless.ingress.annotations }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
     kubernetes.io/ingress.class: "traefik"
