@@ -8,6 +8,10 @@ paperless:
     tag: 2.19.2
     pullPolicy: IfNotPresent
   allowSignups: "false"
+  ingress:
+    host: paperless.example.com
+    className: "traefik"
+    annotations: {}
 
 redis:
   replicaCount: 1
@@ -24,11 +28,6 @@ postgresql:
   auth:
     username: paperless
     password: paperlesspassword
-
-ingress:
-  host: paperless.example.com
-  className: "traefik"
-  annotations: {}
 
 gotenberg:
   image:
