@@ -244,3 +244,34 @@ spec:
         - name: n8n-data
           persistentVolumeClaim:
             claimName: {{ .Chart.Name }}-n8n-data
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}-samba
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}-samba
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}-samba
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}-samba
+          image: "{{ .Values.samba.image.repository }}:{{ .Values.samba.image.tag }}"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: samba
+              containerPort: 445
+              protocol: TCP
+          volumeMounts:
+            - name: samba-data
+              mountPath: /samba          
+      volumes:
+        - name: samba-data
+          persistentVolumeClaim:
+            claimName: {{ .Chart.Name }}-samba-data
+

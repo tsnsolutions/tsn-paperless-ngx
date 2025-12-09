@@ -89,3 +89,16 @@ spec:
       targetPort: 5678
   type: ClusterIP
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Chart.Name }}-samba
+spec:
+  selector:
+    app: {{ .Chart.Name }}-samba
+  ports:
+    - protocol: TCP
+      port: 445
+      targetPort: 445
+  type: ClusterIP
+---
