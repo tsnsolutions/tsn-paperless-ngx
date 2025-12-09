@@ -269,7 +269,7 @@ spec:
               protocol: TCP
           volumeMounts:
             - name: samba-data
-              mountPath: /samba          
+              mountPath: /media          
       volumes:
         - name: samba-data
           persistentVolumeClaim:

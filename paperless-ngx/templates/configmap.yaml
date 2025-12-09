@@ -75,3 +75,12 @@ data:
   N8N_HIRING_BANNER_ENABLED: "false"
   N8N_PERSONALIZATION_ENABLED: "false"
   N8N_VERSION_NOTIFICATIONS_ENABLED: "false"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: samba-config
+data:
+  SHARE: consume:/media/consume
+  SHARE2: documents:/media/media/documents
+  SHARE3: export:/media/export
