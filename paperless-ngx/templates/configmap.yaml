@@ -81,10 +81,10 @@ kind: ConfigMap
 metadata:
   name:  {{ .Chart.Name }}-samba-config
 data:
-  USER: test;test;0;0;0
+  USER: test;test
   SHARE: consume;/data/consume;yes;no;no;all;none;test;directory for consuming documents
   SHARE2: documents;/data/media/documents/originals;yes;yes;no;all;none;test;directory for document storage
   SHARE3: export;/data/export;yes;yes;no;all;none;test;directory for migrating exported documents
   GLOBAL: "log level = 3"
-  GLOBAL1: "force user ="
-  GLOBAL2: "force group ="
+  GLOBAL1: "force user = root"
+  GLOBAL2: "force group = root"
