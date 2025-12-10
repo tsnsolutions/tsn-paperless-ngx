@@ -27,7 +27,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: {{ .Chart.Name }}-paperless-data
 spec:
-  storageClassName: "local-path"y
+  storageClassName: "local-path"
   accessModes:
     - ReadWriteOnce
   resources:
