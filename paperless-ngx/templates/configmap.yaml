@@ -86,3 +86,5 @@ data:
   SHARE2: documents;/data/media/documents/originals;yes;yes;no;all;none;test;directory for document storage
   SHARE3: export;/data/export;yes;yes;no;all;none;test;directory for migrating exported documents
   GLOBAL: "log level = 3"
+  GENERIC: consume;create mask = 0777
+  GENERIC1: consume;directory mask = 0777
