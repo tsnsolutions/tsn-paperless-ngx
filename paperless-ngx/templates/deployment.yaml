@@ -110,7 +110,7 @@ spec:
         - name: paperless-init-scripts
           configMap:
             name: {{ .Chart.Name }}-paperless-init-scripts
-            defaultMode: 0755
+            defaultMode: 0555
         - name: paperless-export
           persistentVolumeClaim:
             claimName: {{ .Chart.Name }}-paperless-export
