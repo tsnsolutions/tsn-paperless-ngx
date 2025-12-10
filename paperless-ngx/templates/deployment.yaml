@@ -267,6 +267,9 @@ spec:
             - name: samba
               containerPort: 445
               protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: {{ .Chart.Name }}-samba-config
           volumeMounts:
             - name: samba-data
               mountPath: /media          
