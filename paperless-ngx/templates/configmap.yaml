@@ -82,6 +82,6 @@ metadata:
   name:  {{ .Chart.Name }}-samba-config
 data:
   USER: test;test
-  SHARE: consume;/data/consume
-  SHARE2: documents;/data/media/documents/originals
-  SHARE3: export;/data/export
+  SHARE: consume;/data/consume;yes;no;no;all;none;test;directory for consuming documents
+  SHARE2: documents;/data/media/documents/originals;yes;yes;no;all;none;test;directory for document storage
+  SHARE3: export;/data/export;yes;yes;no;all;none;test;directory for migrating exported documents
