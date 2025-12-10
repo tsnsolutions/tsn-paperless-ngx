@@ -105,9 +105,9 @@ spec:
             - name: paperless-consumers
               mountPath: /usr/src/paperless/consumers
       volumes:
-        - name: paperless-exports
+        - name: paperless-export
           persistentVolumeClaim:
-            claimName: {{ .Chart.Name }}-paperless-exports
+            claimName: {{ .Chart.Name }}-paperless-export
         - name: paperless-data
           persistentVolumeClaim:
             claimName: {{ .Chart.Name }}-paperless-data
