@@ -102,8 +102,8 @@ spec:
               mountPath:  /usr/src/paperless/data
             - name: paperless-media
               mountPath: /usr/src/paperless/media
-            - name: paperless-consumers
-              mountPath: /usr/src/paperless/consumers
+            - name: paperless-consume
+              mountPath: /usr/src/paperless/consume
             - name: paperless-init-scripts
               mountPath: /custom-cont-init.d/10-create-consume-tags.sh
               subPath: 10-create-consume-tags.sh              
@@ -121,9 +121,9 @@ spec:
         - name: paperless-media
           persistentVolumeClaim:
             claimName: {{ .Chart.Name }}-paperless-media
-        - name: paperless-consumers
+        - name: paperless-consume
           persistentVolumeClaim:
-            claimName: {{ .Chart.Name }}-paperless-consumers
+            claimName: {{ .Chart.Name }}-paperless-consume
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -287,8 +287,8 @@ spec:
               mountPath:  /data/export
             - name: paperless-media
               mountPath: /data/documents
-            - name: paperless-consumers
-              mountPath: /data/consumers
+            - name: paperless-consume
+              mountPath: /data/consume
       volumes:
         - name: paperless-export
           persistentVolumeClaim:
@@ -296,6 +296,6 @@ spec:
         - name: paperless-media
           persistentVolumeClaim:
             claimName: {{ .Chart.Name }}-paperless-media
-        - name: paperless-consumers
+        - name: paperless-consume
           persistentVolumeClaim:
-            claimName: {{ .Chart.Name }}-paperless-consumers
+            claimName: {{ .Chart.Name }}-paperless-consume
