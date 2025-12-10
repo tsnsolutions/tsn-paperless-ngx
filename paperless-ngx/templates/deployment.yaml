@@ -113,7 +113,7 @@ spec:
           image: busybox:1.36
           command: ["chmod", "+x", "/custom-cont-init.d/*.sh"]
           volumeMounts:
-            - name: cpaperless-init-scripts
+            - name: paperless-init-scripts
               mountPath: /custom-cont-init.d
       volumes:
         - name: paperless-init-scripts
