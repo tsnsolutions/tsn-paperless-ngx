@@ -97,7 +97,7 @@ spec:
                   key: password
           volumeMounts:
             - name: paperless-export
-              mountPath:  /usr/src/paperless/exports
+              mountPath:  /usr/src/paperless/export
             - name: paperless-data
               mountPath:  /usr/src/paperless/data
             - name: paperless-media
