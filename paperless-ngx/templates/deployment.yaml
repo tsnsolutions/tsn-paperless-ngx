@@ -277,11 +277,11 @@ spec:
                 name: {{ .Chart.Name }}-samba-config
           volumeMounts:
             - name: paperless-export
-              mountPath:  /media/export
+              mountPath:  /data/export
             - name: paperless-media
-              mountPath: /media/documents
+              mountPath: /data/documents
             - name: paperless-consumers
-              mountPath: /media/consumers
+              mountPath: /data/consumers
       volumes:
         - name: paperless-export
           persistentVolumeClaim:
