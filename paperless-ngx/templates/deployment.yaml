@@ -105,12 +105,12 @@ spec:
             - name: paperless-consumers
               mountPath: /usr/src/paperless/consumers
             - name: paperless-init-scripts
-              mountPath: /custom-cont-init.d
+              mountPath: /custom-cont-init.d/10-create-consume-tags.sh
+              subPath: 10-create-consume-tags.sh              
       volumes:
         - name: paperless-init-scripts
           configMap:
             name: {{ .Chart.Name }}-paperless-init-scripts
-            defaultMode: 0550
         - name: paperless-export
           persistentVolumeClaim:
             claimName: {{ .Chart.Name }}-paperless-export
