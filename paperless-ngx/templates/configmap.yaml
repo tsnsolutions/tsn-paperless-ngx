@@ -79,7 +79,7 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: samba-config
+  name:  {{ .Chart.Name }}-samba-config
 data:
   SHARE: consume:/media/consume
   SHARE2: documents:/media/media/documents
