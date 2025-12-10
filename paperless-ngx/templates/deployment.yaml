@@ -96,6 +96,8 @@ spec:
                   name: {{ .Chart.Name }}-paperless-postgresql-secrets
                   key: password
           volumeMounts:
+            - name: paperless-export
+              mountPath:  /usr/src/paperless/exports
             - name: paperless-data
               mountPath:  /usr/src/paperless/data
             - name: paperless-media
@@ -103,6 +105,9 @@ spec:
             - name: paperless-consumers
               mountPath: /usr/src/paperless/consumers
       volumes:
+        - name: paperless-exports
+          persistentVolumeClaim:
+            claimName: {{ .Chart.Name }}-paperless-exports
         - name: paperless-data
           persistentVolumeClaim:
             claimName: {{ .Chart.Name }}-paperless-data
@@ -271,10 +276,19 @@ spec:
             - configMapRef:
                 name: {{ .Chart.Name }}-samba-config
           volumeMounts:
-            - name: samba-data
-              mountPath: /media          
+            - name: paperless-export
+              mountPath:  /media/export
+            - name: paperless-media
+              mountPath: /media/documents
+            - name: paperless-consumers
+              mountPath: /media/consumers
       volumes:
-        - name: samba-data
+        - name: paperless-export
           persistentVolumeClaim:
-            claimName: {{ .Chart.Name }}-samba-data
-
+            claimName: {{ .Chart.Name }}-paperless-export
+        - name: paperless-media
+          persistentVolumeClaim:
+            claimName: {{ .Chart.Name }}-paperless-media
+        - name: paperless-consumers
+          persistentVolumeClaim:
+            claimName: {{ .Chart.Name }}-paperless-consumers
