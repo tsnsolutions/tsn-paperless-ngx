@@ -95,5 +95,7 @@ metadata:
 data:
   # Dateiname wird zum Key. Der Inhalt ist der Dateiinhalt.
   10-create-consume-tags.sh: |
-    #!bin/sh
-    mkdir -p /usr/src/paperless/consumers/{posteingangsrechnung,postausgangsrechnung}
+    #!/bin/sh
+    set -eu
+    mkdir -p /usr/src/paperless/consume/posteingangsrechnung \
+             /usr/src/paperless/consume/postausgangsrechnung
