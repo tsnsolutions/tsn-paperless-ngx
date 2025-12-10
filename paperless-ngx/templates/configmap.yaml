@@ -97,5 +97,5 @@ data:
   10-create-consume-tags.sh: |
     #!/bin/sh
     set -eu
-    mkdir -p /usr/src/paperless/consume/posteingangsrechnung \
-             /usr/src/paperless/consume/postausgangsrechnung
+    mkdir -p /usr/src/paperless/consumers/posteingangsrechnung \
+             /usr/src/paperless/consumers/postausgangsrechnung
