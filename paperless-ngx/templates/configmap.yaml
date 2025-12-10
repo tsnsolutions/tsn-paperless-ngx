@@ -82,5 +82,5 @@ metadata:
   name:  {{ .Chart.Name }}-samba-config
 data:
   SHARE: consume;/media/consume
-  SHARE2: documents;/media/media/documents
+  SHARE2: documents;/media/documents
   SHARE3: export;/media/export
