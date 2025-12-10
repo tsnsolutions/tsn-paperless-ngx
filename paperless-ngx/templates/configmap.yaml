@@ -81,6 +81,6 @@ kind: ConfigMap
 metadata:
   name:  {{ .Chart.Name }}-samba-config
 data:
-  SHARE: consume:/media/consume
-  SHARE2: documents:/media/media/documents
-  SHARE3: export:/media/export
+  SHARE: consume;/media/consume
+  SHARE2: documents;/media/media/documents
+  SHARE3: export;/media/export
