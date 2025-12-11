@@ -72,7 +72,9 @@ spec:
     metadata:
       labels:
         app: {{ .Chart.Name }}-paperless
-    spec:
+      annotations:
+        config/checksum: "{{ include (print $.Template.BasePath \"/configmap.yaml\") . | sha256sum }}"
+        secret/checksum: "{{ include (print $.Template.BasePath \"/secret.yaml\") . | sha256sum }}"    spec:
       containers:
         - name: {{ .Chart.Name }}-paperless
           image: "{{ .Values.paperless.image.repository }}:{{ .Values.paperless.image.tag }}"
@@ -270,6 +272,9 @@ spec:
     metadata:
       labels:
         app: {{ .Chart.Name }}-samba
+      annotations:
+        config/checksum: "{{ include (print $.Template.BasePath \"/configmap.yaml\") . | sha256sum }}"
+        secret/checksum: "{{ include (print $.Template.BasePath \"/secret.yaml\") . | sha256sum }}"
     spec:
       containers:
         - name: {{ .Chart.Name }}-samba
