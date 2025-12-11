@@ -62,6 +62,6 @@ samba:
   image:
     repository: dperson/samba
     tag: "latest"
-  username: sambauser
-  password: sambapassword
+  username: test
+  password: test
   domain: WORKGROUP
