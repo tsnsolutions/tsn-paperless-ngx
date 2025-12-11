@@ -72,6 +72,7 @@ spec:
     metadata:
       labels:
         app: {{ .Chart.Name }}-paperless
+    spec:
       containers:
         - name: {{ .Chart.Name }}-paperless
           image: "{{ .Values.paperless.image.repository }}:{{ .Values.paperless.image.tag }}"
