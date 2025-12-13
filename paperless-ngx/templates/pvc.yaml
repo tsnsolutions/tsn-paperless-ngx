@@ -3,81 +3,81 @@ kind: PersistentVolumeClaim
 metadata:
   name: {{ .Chart.Name }}-paperless-postgresql-data
 spec:
-  storageClassName: "local-path"
+  storageClassName: {{ .Values.postgresql.persistence.storageClassName }}
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi
+      storage: {{ .Values.postgresql.persistence.size }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: {{ .Chart.Name }}-paperless-export
 spec:
-  storageClassName: "local-path"
+  storageClassName: {{ .Values.paperless.persistence.storageClassName }}
   accessModes:      
     - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi
+      storage: {{ .Values.paperless.persistence.export.size }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: {{ .Chart.Name }}-paperless-data
 spec:
-  storageClassName: "local-path"
+  storageClassName: {{ .Values.paperless.persistence.storageClassName }}
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi
+      storage: {{ .Values.paperless.persistence.data.size }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: {{ .Chart.Name }}-paperless-media
 spec:
-  storageClassName: "local-path"
+  storageClassName: {{ .Values.paperless.persistence.storageClassName }}
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi  
+      storage: {{ .Values.paperless.persistence.media.size }}  
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: {{ .Chart.Name }}-paperless-consume
 spec:
-  storageClassName: "local-path"
+  storageClassName: {{ .Values.paperless.persistence.storageClassName }}
   accessModes:      
     - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi
+      storage: {{ .Values.paperless.persistence.consume.size }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: {{ .Chart.Name }}-n8n-data
 spec:
-  storageClassName: "local-path"
+  storageClassName: {{ .Values.n8n.persistence.storageClassName }}
   accessModes:      
     - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi
+      storage: {{ .Values.n8n.persistence.data.size }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: {{ .Chart.Name }}-n8n-postgresql-data
 spec:
-  storageClassName: "local-path"
+  storageClassName: {{ .Values.n8n.postgresql.persistence.storageClassName }}
   accessModes:      
     - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi
+      storage: {{ .Values.n8n.postgresql.persistence.size }}
